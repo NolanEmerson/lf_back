@@ -1,0 +1,32 @@
+.container {
+    width: 100%;
+    height: auto;
+    min-height: 100vh;
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+}
+
+.feedContainer {
+    border: 2px solid black;
+    width: 80%;
+    padding: 20px;
+    margin: 20px;
+}
+
+.feedItem {
+    border: 1px solid black;
+    border-radius: 15px;
+    padding: 10px;
+    margin-bottom: 20px;
+}
+
+.feedItem:last-child {
+    margin-bottom: 0px;
+}
+
+.feedItem > img {
+    max-width: 80%;
+    margin: 0 auto;
+    display: block;
+}
