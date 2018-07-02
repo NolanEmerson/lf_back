@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>LF Back Assessment</title>
+    <link rel="stylesheet" href="/assets/style.css">
+    <script src='/socket.io/socket.io.js'></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+    <script>
+        $(function () {
+            const socket = io();
+            $('form').submit(function(){
+                socket.emit('chat message', $('#hashInput').val());
+                $('#hashInput').val('');
+                return false;
+            });
+            // socket.on('chat message', (msg) => {
+            //     $('#messages').append($('<li>').text(msg));
+            // });
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Hashtag Feed</h1>
+        <form action="">
+            <label for="hashtag"></label>
+            <input type="text" name='hashtag' id='hashInput' autocomplete="off">
+            <input type="submit" value='Search'>
+        </form>
+        <main class='feedContainer'>
+            <% tweets.forEach((item) => { %>
+                <div class='feedItem'>
+                    <h2 class='handle'><%= item.user.name %></h2>
+                    <p class="caption"><%= item.text %></p>
+                    <% if (item.entities.media) { %>
+                        <img src="<%= item.entities.media[0].media_url %>" alt="">
+                    <% } %>
+                </div>
+            <% }); %>
+            <!-- <div class='feedItem'>
+                <h2 class='handle'>Steve</h2>
+                <p class="caption">Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur eos molestiae nesciunt quae odio quia aspernatur porro deserunt quasi beatae!</p>
+                <img src="https://vignette.wikia.nocookie.net/spongebob/images/0/0e/The_Two_Faces_of_Squidward_24.jpg/revision/latest?cb=20131029000807" alt="">
+            </div>
+            <div class='feedItem'>
+                <h2 class='handle'>Steve</h2>
+                <p class="caption">Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur eos molestiae nesciunt quae odio quia aspernatur porro deserunt quasi beatae!</p>
+                <img src="https://vignette.wikia.nocookie.net/spongebob/images/0/0e/The_Two_Faces_of_Squidward_24.jpg/revision/latest?cb=20131029000807" alt="">
+            </div> -->
+        </main>
+    </div>
+</body>
+</html>
