@@ -16,9 +16,21 @@
                 $('#hashInput').val('');
                 return false;
             });
-            // socket.on('chat message', (msg) => {
-            //     $('#messages').append($('<li>').text(msg));
-            // });
+            socket.on('chat message', (tag) => {
+                $('.feedContainer').empty();
+                
+                tag.forEach( (item) => {
+                    const feedItem = $('<div>').addClass('feedItem');
+                    const handle = $('<h2>').addClass('handle').text(item.user.name);
+                    const caption = $('<p>').addClass('caption').text(item.text);
+                    const img = (item.entities.media) ? $('<img>').attr('src', item.entities.media[0].media_url) : null
+
+                    feedItem.append(handle, caption, img);
+                    $('.feedContainer').append(feedItem);
+                });
+
+                // $('#messages').append($('<li>').text(msg));
+            });
         });
     </script>
 </head>
