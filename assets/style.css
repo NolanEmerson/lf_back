@@ -30,3 +30,11 @@
     margin: 0 auto;
     display: block;
 }
+
+.handle {
+    display: inline-block;
+}
+
+.feedItem > div > img {
+    margin-right: 20px;
+}
