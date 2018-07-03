@@ -12,24 +12,37 @@
         $(function () {
             const socket = io();
             $('form').submit(function(){
-                socket.emit('chat message', $('#hashInput').val());
+                socket.emit('new tag', $('#hashInput').val());
                 $('#hashInput').val('');
                 return false;
             });
-            socket.on('chat message', (tag) => {
+            socket.on('new tag', (tag) => {
                 $('.feedContainer').empty();
                 
                 tag.forEach( (item) => {
                     const feedItem = $('<div>').addClass('feedItem');
+                    const header = $('<div>');
+                    const icon = $('<img>').attr('src', item.user.profile_image_url_https).addClass('icon');
                     const handle = $('<h2>').addClass('handle').text(item.user.name);
-                    const caption = $('<p>').addClass('caption').text(item.text);
+                    const caption = $('<p>').addClass('caption').text(item.extended_tweet ? item.extended_tweet.full_text : item.text);
                     const img = (item.entities.media) ? $('<img>').attr('src', item.entities.media[0].media_url) : null
-
-                    feedItem.append(handle, caption, img);
+                    
+                    header.append(icon, handle);
+                    feedItem.append(header, caption, img);
                     $('.feedContainer').append(feedItem);
                 });
+            });
+            socket.on('new tweet', (tweet) => {
+                const feedItem = $('<div>').addClass('feedItem');
+                const header = $('<div>');
+                const icon = $('<img>').attr('src', tweet.user.profile_image_url_https).addClass('icon');
+                const handle = $('<h2>').addClass('handle').text(tweet.user.name);
+                const caption = $('<p>').addClass('caption').text(tweet.extended_tweet ? tweet.extended_tweet.full_text : tweet.text);
+                const img = (tweet.entities.media) ? $('<img>').attr('src', tweet.entities.media[0].media_url) : null
 
-                // $('#messages').append($('<li>').text(msg));
+                header.append(icon, handle);
+                feedItem.append(header, caption, img);
+                $('.feedContainer').prepend(feedItem);
             });
         });
     </script>
@@ -45,23 +58,17 @@
         <main class='feedContainer'>
             <% tweets.forEach((item) => { %>
                 <div class='feedItem'>
-                    <h2 class='handle'><%= item.user.name %></h2>
-                    <p class="caption"><%= item.text %></p>
+                    <div>
+                        <img src="<%= item.user.profile_image_url_https %>" class='icon' alt="">
+                        <h2 class='handle'><%= item.user.name %></h2>
+                    </div>
+                    <p class="caption"><%= item.extended_tweet ? item.extended_tweet.full_text : item.text %></p>
+                    <p class="caption"><%= item.created_at %></p>
                     <% if (item.entities.media) { %>
                         <img src="<%= item.entities.media[0].media_url %>" alt="">
                     <% } %>
                 </div>
             <% }); %>
-            <!-- <div class='feedItem'>
-                <h2 class='handle'>Steve</h2>
-                <p class="caption">Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur eos molestiae nesciunt quae odio quia aspernatur porro deserunt quasi beatae!</p>
-                <img src="https://vignette.wikia.nocookie.net/spongebob/images/0/0e/The_Two_Faces_of_Squidward_24.jpg/revision/latest?cb=20131029000807" alt="">
-            </div>
-            <div class='feedItem'>
-                <h2 class='handle'>Steve</h2>
-                <p class="caption">Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur eos molestiae nesciunt quae odio quia aspernatur porro deserunt quasi beatae!</p>
-                <img src="https://vignette.wikia.nocookie.net/spongebob/images/0/0e/The_Two_Faces_of_Squidward_24.jpg/revision/latest?cb=20131029000807" alt="">
-            </div> -->
         </main>
     </div>
 </body>
